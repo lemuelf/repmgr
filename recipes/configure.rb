@@ -130,7 +130,7 @@ else
   node.set[:postgresql][:config][:hot_standby_feedback] = node[:repmgr][:replication][:standby_feedback]
   node.set[:postgresql][:config][:max_standby_streaming_delay] = node[:repmgr][:replication][:max_streaming_delay]
   node.default[:postgresql][:config][:listen_addresses] = node[:repmgr][:replication][:listen_addresses]
-  
+
   if(master_node)
     node.default[:repmgr][:addressing][:master] = master_node[:repmgr][:addressing][:self]
     file '/var/lib/postgresql/.ssh/known_hosts' do
@@ -145,7 +145,7 @@ node.set[:postgresql][:config][:max_wal_senders] = node[:repmgr][:replication][:
 node.set[:postgresql][:config][:wal_keep_segments] = node[:repmgr][:replication][:keep_segments]
 
 # HBA
-node.default[:postgresql][:pg_hba] = [
+node.set[:postgresql][:pg_hba] = [
   {:type => 'hostssl', :db => node[:repmgr][:replication][:database], :user => node[:repmgr][:replication][:user], :addr => node[:repmgr][:master_allow_from], :method => 'md5'},
   {:type => 'hostssl', :db => 'replication', :user => node[:repmgr][:replication][:user], :addr => node[:repmgr][:master_allow_from], :method => 'md5'}
 ] + node[:postgresql][:pg_hba]
