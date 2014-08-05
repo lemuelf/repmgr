@@ -145,7 +145,9 @@ node.set[:postgresql][:config][:max_wal_senders] = node[:repmgr][:replication][:
 node.set[:postgresql][:config][:wal_keep_segments] = node[:repmgr][:replication][:keep_segments]
 
 # HBA
+host_type = 'host'
+host_type << 'ssl' if !!node[:postgresql][:config][:ssl]
 node.set[:postgresql][:pg_hba] = [
-  {:type => 'hostssl', :db => node[:repmgr][:replication][:database], :user => node[:repmgr][:replication][:user], :addr => node[:repmgr][:master_allow_from], :method => 'md5'},
-  {:type => 'hostssl', :db => 'replication', :user => node[:repmgr][:replication][:user], :addr => node[:repmgr][:master_allow_from], :method => 'md5'}
+  {:type => host_type, :db => node[:repmgr][:replication][:database], :user => node[:repmgr][:replication][:user], :addr => node[:repmgr][:master_allow_from], :method => 'md5'},
+  {:type => host_type, :db => 'replication', :user => node[:repmgr][:replication][:user], :addr => node[:repmgr][:master_allow_from], :method => 'md5'}
 ] + node[:postgresql][:pg_hba]
